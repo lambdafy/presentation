@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Title</title>
+        <meta charset="utf-8">
+        <style>
+         @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+         @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+         @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+         body { font-family: 'Droid Serif'; }
+         h1, h2, h3 {
+             font-family: 'Yanone Kaffeesatz';
+             font-weight: normal;
+         }
+         .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+
+         blockquote {
+             border-left: 0.3em solid rgba(0,0,0,0.5);
+             padding: 0 15px;
+             font-style: italic;
+         }
+
+        </style>
+    </head>
+    <body>
+        <textarea id="source">
+
+# Some promises of OOP
+
+Reuse - OOP makes programming faster and easier because of the reuse of existing, previously tested classes from a library.  Reuse can also be accomplished by inheritance.
+
+--
+
+# Code Reuse
+
+> Reusability has been difficult to achieve on early object-oriented projects because class libraries are not inherently very reusable. Searching through a class library, and understanding the details of code used to build the classes, can often cost more than rebuilding the classes from scratch."
+>
+> <footer>
+    - <cite>The Object Technology Architecture: Business Objects for Corporate Information Systems
+            Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings</cite>
+  </footer>
+
+--
+
+# But still they were quite optimistic ...
+
+> "By 1997, it will be possible to buy 50% of an application as off-the-shelf components, effectively doubling productivity. By 1998, early adopters will be buying 50% of the application as external components and reusing internally generated components for another 25% of the application, effectively doubling productivity on an annual basis"
+
+The Object Technology Architecture: Business Objects for Corporate Information Systems
+Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings
+
+--
+
+# But still OOP is on the rise
+* object-oriented COBOL 2002 ISO standard
+* ECMAScript 6 with classes
+
+--
+
+# JFYI
+
+Fernandez, David, et al. "Has the Object-Oriented Paradigm Kept Its Promise?." (2002).
+APA	
+http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesAndReality.pdf
+
+--
+
+# Functions
+
+> “Sometimes, the elegant implementation is just a function. Not a method. Not a class. Not a framework. Just a function.” – John Carmack
+
+--
+
+# SRP (Single Responsibility Principle)
+
+--
+
+# Java 8 Functions
+Do we need to have introduction to Java 8 Functional Interface?
+
+--
+# Composition
+
+Some examples of compose and andThen ....
+
+--
+
+# Composition over inheritance 
+
+But we actually knew that for a long time:
+
+> "Favor 'object composition' over 'class inheritance'." (Gang of Four 1995:20)
+
+> "Favor composition over inheritance." (Effective Java, Joshua Bloch 2001)
+
+
+# Composition with High-Order functions
+show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
+
+--
+
+# reduce
+
+--
+
+# map
+
+--
+
+# filter
+
+--
+
+# Context
+
+--
+
+# flatMap
+show examples with streams, ComposibleFutures, Observables, Options
+
+--
+        </textarea>
+        <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+        </script>
+        <script>
+         var slideshow = remark.create();
+        </script>
+    </body>
+</html>
