@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Title</title>
+        <title>Use functions for a greater good</title>
         <meta charset="utf-8">
         <style>
          @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -14,7 +14,6 @@
              font-weight: normal;
          }
          .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
-
 
          blockquote {
              border-left: 0.3em solid rgba(0,0,0,0.5);
@@ -42,7 +41,7 @@ Reuse - OOP makes programming faster and easier because of the reuse of existing
             Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings</cite>
   </footer>
 
---
+---
 
 # But still they were quite optimistic ...
 
@@ -57,35 +56,82 @@ Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings
 * object-oriented COBOL 2002 ISO standard
 * ECMAScript 6 with classes
 
---
+---
 
 # JFYI
 
 Fernandez, David, et al. "Has the Object-Oriented Paradigm Kept Its Promise?." (2002).
-APA	
+APA    
 http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesAndReality.pdf
 
---
+---
 
 # Functions
 
 > “Sometimes, the elegant implementation is just a function. Not a method. Not a class. Not a framework. Just a function.” – John Carmack
 
---
+---
 
 # SRP (Single Responsibility Principle)
 
---
+---
 
-# Java 8 Functions
-Do we need to have introduction to Java 8 Functional Interface?
-
+# Functional interfaces (SAM) 
+```Java
+public void produce_drum_and_bass_with_lenzman(){
+    final Label label = new HospitalRecords();
+    final Music music = label.produceWith(new Artist() {
+        @Override
+*       public String name() {
+*           return "Lenzman";
+*       }
+    });
+    music.play(); // Producing Drum and Bass with famous Lenzman.
+}
+```
 --
+```Java
+public void produce_drum_and_bass_with_lenzman(){
+    final Label label = new HospitalRecords(); 
+*   final Music music = label.produceWith(() -> "Lenzman");
+    music.play(); // Producing Drum and Bass with famous Lenzman.
+}
+```
+---
+# Functional interfaces (SAM) 
+```Java
+public interface Label {
+    Music produceWith(Artist artist);
+}
+class HospitalRecords implements Label {
+    @Override
+*   public Music produceWith(Artist artist) {
+*       return new DrumAndBass(artist);
+*   }
+}
+```
+--
+```Java
+public void produce_drum_and_bass_with_lenzman(){
+*   final Label label = artist -> new DrumAndBass(artist);
+    final Music music = label.produceWith(() -> "Lenzman");
+    music.play(); // Producing Drum and Bass with famous Lenzman.
+}
+```
+--
+```Java
+public void produce_drum_and_bass_with_lenzman(){
+*   final Label label = DrumAndBass::new;
+    final Music music = label.produceWith(() -> "Lenzman");
+    music.play(); // Producing Drum and Bass with famous Lenzman.
+}
+```
+---
 # Composition
 
 Some examples of compose and andThen ....
 
---
+---
 
 # Composition over inheritance 
 
@@ -99,33 +145,35 @@ But we actually knew that for a long time:
 # Composition with High-Order functions
 show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
 
---
+---
 
 # reduce
 
---
+---
 
 # map
 
---
+---
 
 # filter
 
---
+---
 
 # Context
 
---
+---
 
 # flatMap
 show examples with streams, ComposibleFutures, Observables, Options
 
---
+---
         </textarea>
         <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
         </script>
         <script>
-         var slideshow = remark.create();
+                var slideshow = remark.create({
+                   highlightLines: true
+                });
         </script>
     </body>
 </html>
