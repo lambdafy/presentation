@@ -78,7 +78,6 @@ http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesA
 
 # Functional interfaces (SAM) 
 ```Java
-public void produce_drum_and_bass_with_lenzman(){
     final Label label = new HospitalRecords();
     final Music music = label.produceWith(new Artist() {
         @Override
@@ -87,44 +86,42 @@ public void produce_drum_and_bass_with_lenzman(){
 *       }
     });
     music.play(); // Producing Drum and Bass with famous Lenzman.
-}
 ```
 --
 ```Java
-public void produce_drum_and_bass_with_lenzman(){
     final Label label = new HospitalRecords(); 
 *   final Music music = label.produceWith(() -> "Lenzman");
     music.play(); // Producing Drum and Bass with famous Lenzman.
-}
 ```
 ---
 # Functional interfaces (SAM) 
 ```Java
 public interface Label {
-    Music produceWith(Artist artist);
+*   Music produceWith(Artist artist);
 }
 class HospitalRecords implements Label {
-    @Override
-*   public Music produceWith(Artist artist) {
-*       return new DrumAndBass(artist);
-*   }
+    public Music produceWith(Artist artist) {
+        return new DrumAndBass(artist);
+    }
 }
 ```
 --
 ```Java
-public void produce_drum_and_bass_with_lenzman(){
 *   final Label label = artist -> new DrumAndBass(artist);
     final Music music = label.produceWith(() -> "Lenzman");
     music.play(); // Producing Drum and Bass with famous Lenzman.
-}
 ```
 --
 ```Java
-public void produce_drum_and_bass_with_lenzman(){
 *   final Label label = DrumAndBass::new;
     final Music music = label.produceWith(() -> "Lenzman");
     music.play(); // Producing Drum and Bass with famous Lenzman.
-}
+```
+--
+```Java
+*   final Function<Artist, Music> label = DrumAndBass::new;
+    final Music music = label.apply(() -> "Lenzman");
+    music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 ---
 # Composition
