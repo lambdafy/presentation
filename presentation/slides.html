@@ -25,6 +25,7 @@
     </head>
     <body>
         <textarea id="source">
+# Is OOP the Holly Grail?
 
 # Some promises of OOP
 
@@ -37,9 +38,9 @@ Reuse - OOP makes programming faster and easier because of the reuse of existing
 > Reusability has been difficult to achieve on early object-oriented projects because class libraries are not inherently very reusable. Searching through a class library, and understanding the details of code used to build the classes, can often cost more than rebuilding the classes from scratch."
 >
 > <footer>
-    - <cite>The Object Technology Architecture: Business Objects for Corporate Information Systems
+            - <cite>The Object Technology Architecture: Business Objects for Corporate Information Systems
             Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings</cite>
-  </footer>
+</footer>
 
 ---
 
@@ -123,47 +124,106 @@ class HospitalRecords implements Label {
     final Music music = label.apply(() -> "Lenzman");
     music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
----
-# Composition
-
-Some examples of compose and andThen ....
 
 ---
-
 # Composition over inheritance 
-
-But we actually knew that for a long time:
-
 > "Favor 'object composition' over 'class inheritance'." (Gang of Four 1995:20)
 
 > "Favor composition over inheritance." (Effective Java, Joshua Bloch 2001)
 
+--
 
-# Composition with High-Order functions
-show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
-
----
-
-# reduce
+But how to properly compose classes?
 
 ---
+# Function Composition in Math
+```Haskell
+    squared x = x*x
+    negated x = -x
+    squaredAndNegated = negated . squared
+    squaredAndNegated 8 // -64 
+    
+```
+--
+```Haskell
+    f :: A -> B
+    g :: B -> C
+*   z :: A -> C
+```
+--
+```Haskell
+    . :: (B -> C) -> (A -> B) -> (A -> C)
+    . g f x = g(f(x))
+```
+---
+# Function Composition in Java 8
+```Java
+    Function<A, C> compose(Function<B, C> g, Function<A, B> f) =
+       (A a) -> g.apply(f.apply(a));
+```
+--
+```Java
+    final Function<Integer, Integer> squared = a -> a * a;
+    final Function<Integer, Integer> negated = a -> -a;
+*   final Function<Integer, Integer> squaredAndNegated =
+*     negated.compose(squared);
+    squaredAndNegated.apply(4); // -16
+```
+--
+```Java
+    final Function<Artist, Music> writeSomeRandomMusic = Music::new;
+    final Function<Music, Track> recordTheMusic = Track::new;
+*   final Function<Artist, Track> produceTrack =
+*     recordTheMusic.compose(writeSomeRandomMusic);
 
-# map
+```
 
 ---
+# End-to-End example
+```Java
+    final Function<Artist, Music> writeSomeRandomMusic = Music::new;
+    final Function<Music, Track> recordTheMusic = Track::new;
+    final Function<List<Track>, Album> publishTheAlbum = Album::new;
 
-# filter
+    final Function<Artist, Track> produceTrack =
+       recordTheMusic.compose(writeSomeRandomMusic);
+*   final Function<Artist, List<Track>> produceTracks = ???
+    final Function<Artist, Album> produceTheAlbum =
+       publishTheAlbum.compose(produceTracks);
+
+    Artist someArtist = new Artist("Some Artist");
+    produceTheAlbum.apply(someArtist); // And we get the Album in the end
+```
 
 ---
-
-# Context
-
----
-
-# flatMap
-show examples with streams, ComposibleFutures, Observables, Options
+# High-Order functions
 
 ---
+    # Composition with High-Order functions
+    show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
+
+    ---
+
+    # reduce
+
+    ---
+
+    # map
+
+    ---
+
+    # filter
+
+    ---
+
+    # Context
+
+    ---
+
+    # flatMap
+    show examples with streams, ComposibleFutures, Observables, Options
+
+    ---
         </textarea>
         <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
         </script>
