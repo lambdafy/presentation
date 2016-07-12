@@ -63,7 +63,7 @@ public class LambdafyTestComposition {
         final Function<Artist, Music> writeSomeRandomMusic = Music::new;
         final Function<Music, Track> recordTheMusic = Track::new;
         final Function<List<Track>, Album> publishTheAlbum = Album::new;
-        
+
         final Function<Artist, Track> produceTrack = recordTheMusic.compose(writeSomeRandomMusic);
 
         final Function<Artist, List<Track>> produceTracks =

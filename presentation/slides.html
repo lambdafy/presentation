@@ -21,6 +21,24 @@
              font-style: italic;
          }
 
+         /* Two-column layout */
+         .left-column {
+             color: #777;
+             width: 50%;
+             height: 100%;
+             float: left;
+         }
+         .left-column h2:last-of-type, .left-column h3:last-child {
+             color: #000;
+         }
+         .right-column {
+             width: 50%;
+             height: 100%;
+             float: right;
+             padding-top: 1em;
+         }
+
+
         </style>
     </head>
     <body>
@@ -66,13 +84,55 @@ APA
 http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesAndReality.pdf
 
 ---
-
 # Functions
 
 > “Sometimes, the elegant implementation is just a function. Not a method. Not a class. Not a framework. Just a function.” – John Carmack
 
 ---
+# What is a Function?
 
+> In mathematics, a function is a relation between a set of inputs and a set of permissible outputs with the property that each input is related to exactly one output. An example is the function that relates each real number x to its square x2.
+
+--
+.left-column[
+![](/images/191px-Function_machine2.svg.png)
+]
+--
+.right-column[
+![:scale 100%](/images/function.png)
+]
+---
+# Pure Functions
+
+> A pure function is a function which: Given the same input, will always return the same output. Produces no side effects.
+
+--
+
+> In computer science, a function or expression is said to have a side effect if, in addition to returning a value, it also modifies some state or has an observable interaction with calling functions or the outside world.
+
+---
+# Pure Functions
+
+.center[
+![:scale 30%](/images/function.png)
+]
+--
+
+What would be the result of: `f(a) -> ???`
+
+--
+
+What we expect: `f(a) -> 2`
+
+--
+
+What we get:
+
+.center[
+![:scale 20%](/images/Pershing_II_-_4th_test_launch.jpeg)
+]
+
+---
 # SRP (Single Responsibility Principle)
 
 ---
@@ -123,7 +183,7 @@ class HospitalRecords implements Label {
 *   final Function<Artist, Music> label = DrumAndBass::new;
     final Music music = label.apply(() -> "Lenzman");
     music.play(); // Producing Drum and Bass with famous Lenzman.
-```
+    ```
 
 ---
 # Composition over inheritance 
@@ -133,13 +193,30 @@ class HospitalRecords implements Label {
 
 --
 
-But how to properly compose classes?
+    But how to properly compose classes?
+
+    interface A {
+    G doSomeStuff();
+    C doSomeOtherStuff();
+    }
+
+    interface B {
+
+    }
+
+    How to compose A and B
+
 ---
 # Function Composition
 ```Java
-    Function<A, C> compose(Function<B, C> g, Function<A, B> f) =
-       (A a) -> g.apply(f.apply(a));
+  Function<A, C> compose(Function<B, C> g, Function<A, B> f) =
+    a -> g.apply(f.apply(a));
 ```
+
+--
+
+![:scale 80%](/images/composition.png)
+
 --
 ```Java
     final Function<Integer, Integer> squared = a -> a * a;
@@ -148,13 +225,14 @@ But how to properly compose classes?
 *     negated.compose(squared);
     squaredAndNegated.apply(4); // -16
 ```
---
+
+---
+# Function Composition in Java 8
 ```Java
     final Function<Artist, Music> writeSomeRandomMusic = Music::new;
     final Function<Music, Track> recordTheMusic = Track::new;
 *   final Function<Artist, Track> produceTrack =
 *     recordTheMusic.compose(writeSomeRandomMusic);
-
 ```
 
 ---
@@ -165,10 +243,10 @@ But how to properly compose classes?
     final Function<List<Track>, Album> publishTheAlbum = Album::new;
 
     final Function<Artist, Track> produceTrack =
-       recordTheMusic.compose(writeSomeRandomMusic);
-*   final Function<Artist, List<Track>> produceTracks = ???
+    recordTheMusic.compose(writeSomeRandomMusic);
+    *   final Function<Artist, List<Track>> produceTracks = ???
     final Function<Artist, Album> produceTheAlbum =
-       publishTheAlbum.compose(produceTracks);
+    publishTheAlbum.compose(produceTracks);
 
     Artist someArtist = new Artist("Some Artist");
     produceTheAlbum.apply(someArtist); // And we get the Album in the end
@@ -178,10 +256,10 @@ But how to properly compose classes?
 # High-Order functions
 
 ---
-    # Composition with High-Order functions
-    show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
+# Composition with High-Order functions
+show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
 
-    ---
+---
 
     # reduce
 
@@ -203,10 +281,15 @@ But how to properly compose classes?
     show examples with streams, ComposibleFutures, Observables, Options
 
     ---
+
         </textarea>
-        <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+        <script src="remark-latest.min.js">
         </script>
         <script>
+            remark.macros.scale = function (percentage) {
+  var url = this;
+  return '<img src="' + url + '" style="width: ' + percentage + '" />';
+};
                 var slideshow = remark.create({
                    highlightLines: true
                 });
