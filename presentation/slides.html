@@ -21,7 +21,21 @@
              font-style: italic;
          }
 
-         /* Two-column layout */
+      .left-column-20 {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column-20 h2:last-of-type, .left-column-20 h3:last-child {
+          color: #000;
+        }
+      .right-column-75 {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+
          .left-column {
              color: #777;
              width: 50%;
@@ -95,11 +109,11 @@ http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesA
 
 --
 .left-column[
-![](/images/191px-Function_machine2.svg.png)
+![](images/191px-Function_machine2.svg.png)
 ]
 --
 .right-column[
-![:scale 100%](/images/function.png)
+![:scale 100%](images/function.png)
 ]
 ---
 # Pure Functions
@@ -114,7 +128,7 @@ http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesA
 # Pure Functions
 
 .center[
-![:scale 30%](/images/function.png)
+![:scale 30%](images/function.png)
 ]
 --
 
@@ -129,7 +143,7 @@ What we expect: `f(a) -> 2`
 What we get:
 
 .center[
-![:scale 20%](/images/Pershing_II_-_4th_test_launch.jpeg)
+![:scale 20%](images/Pershing_II_-_4th_test_launch.jpeg)
 ]
 
 ---
@@ -139,20 +153,20 @@ What we get:
 
 # Functional interfaces (SAM) 
 ```Java
-    final Label label = new HospitalRecords();
-    final Music music = label.produceWith(new Artist() {
-        @Override
-*       public String name() {
-*           return "Lenzman";
-*       }
-    });
-    music.play(); // Producing Drum and Bass with famous Lenzman.
+Label label = new HospitalRecords();
+Music music = label.produceWith(new Artist() {
+    @Override
+*   public String name() {
+*       return "Lenzman";
+*   }
+});
+music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 --
 ```Java
-    final Label label = new HospitalRecords(); 
-*   final Music music = label.produceWith(() -> "Lenzman");
-    music.play(); // Producing Drum and Bass with famous Lenzman.
+Label label = new HospitalRecords(); 
+*Music music = label.produceWith(() -> "Lenzman");
+music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 ---
 # Functional interfaces (SAM) 
@@ -168,22 +182,22 @@ class HospitalRecords implements Label {
 ```
 --
 ```Java
-*   final Label label = artist -> new DrumAndBass(artist);
-    final Music music = label.produceWith(() -> "Lenzman");
-    music.play(); // Producing Drum and Bass with famous Lenzman.
+*Label label = artist -> new DrumAndBass(artist);
+Music music = label.produceWith(() -> "Lenzman");
+music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 --
 ```Java
-*   final Label label = DrumAndBass::new;
-    final Music music = label.produceWith(() -> "Lenzman");
-    music.play(); // Producing Drum and Bass with famous Lenzman.
+*Label label = DrumAndBass::new;
+Music music = label.produceWith(() -> "Lenzman");
+music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 --
 ```Java
-*   final Function<Artist, Music> label = DrumAndBass::new;
-    final Music music = label.apply(() -> "Lenzman");
-    music.play(); // Producing Drum and Bass with famous Lenzman.
-    ```
+*Function<Artist, Music> label = DrumAndBass::new;
+Music music = label.apply(() -> "Lenzman");
+music.play(); // Producing Drum and Bass with famous Lenzman.
+```
 
 ---
 # Composition over inheritance 
@@ -215,13 +229,13 @@ class HospitalRecords implements Label {
 
 --
 
-![:scale 80%](/images/composition.png)
+![:scale 80%](images/composition.png)
 
 --
 ```Java
-    final Function<Integer, Integer> squared = a -> a * a;
-    final Function<Integer, Integer> negated = a -> -a;
-*   final Function<Integer, Integer> squaredAndNegated =
+    Function<Integer, Integer> squared = a -> a * a;
+    Function<Integer, Integer> negated = a -> -a;
+*   Function<Integer, Integer> squaredAndNegated =
 *     negated.compose(squared);
     squaredAndNegated.apply(4); // -16
 ```
@@ -229,23 +243,24 @@ class HospitalRecords implements Label {
 ---
 # Function Composition in Java 8
 ```Java
-    final Function<Artist, Music> writeSomeRandomMusic = Music::new;
-    final Function<Music, Track> recordTheMusic = Track::new;
-*   final Function<Artist, Track> produceTrack =
+    Function<Artist, Music> writeSomeRandomMusic = Music::new;
+    Function<Music, Track> recordTheMusic = Track::new;
+*   Function<Artist, Track> produceTrack =
 *     recordTheMusic.compose(writeSomeRandomMusic);
 ```
+
 
 ---
 # Music production pipeline 
 ```Java
-    final Function<Artist, Music> writeSomeRandomMusic = Music::new;
-    final Function<Music, Track> recordTheMusic = Track::new;
-    final Function<List<Track>, Album> publishTheAlbum = Album::new;
+    Function<Artist, Music> writeSomeRandomMusic = Music::new;
+    Function<Music, Track> recordTheMusic = Track::new;
+    Function<List<Track>, Album> publishTheAlbum = Album::new;
 
-    final Function<Artist, Track> produceTrack =
+    Function<Artist, Track> produceTrack =
     recordTheMusic.compose(writeSomeRandomMusic);
-    *   final Function<Artist, List<Track>> produceTracks = ???
-    final Function<Artist, Album> produceTheAlbum =
+*   Function<Artist, List<Track>> produceTracks = ???
+    Function<Artist, Album> produceTheAlbum =
     publishTheAlbum.compose(produceTracks);
 
     Artist someArtist = new Artist("Some Artist");
@@ -254,34 +269,112 @@ class HospitalRecords implements Label {
 
 ---
 # High-Order functions
-
 ---
 # Composition with High-Order functions
 show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
 
----
-
     # reduce
-
-    ---
 
     # map
 
-    ---
-
     # filter
 
-    ---
-
     # Context
-
-    ---
 
     # flatMap
     show examples with streams, ComposibleFutures, Observables, Options
 
-    ---
+---
+# Translation of Lambdas
+.left-column-20[
+## Desugar
+]
+.right-column-75[
+Lambda bodies are lowered to private methods
 
+```Java
+Function<String, String> f = a -> a;
+```
+```Java
+private static String lambda$main$0(String a){
+    return a;
+}
+```
+]
+---
+# Translation of Lambdas
+.left-column-20[
+## Desugar
+## Replace 
+]
+.right-column-75[
+`invokeDynamic` substitutes lambda expression
+
+```Java
+Function<String, String> f = 
+   indy(MH(metaFactory), MH(invokeVirtual Function.apply), 
+        MH(invokeStatic lambda$main$0)());
+```
+At runtime 
+- `metaFactory` used once to create a Factory (`CallSite`) which generates instances of the `Function` interface
+
+- first `MethodHandle` identifies `Function.apply` as the functional interface method to which the lambda is being converted
+
+- second `MethodHandle` identifies `lambda$main$0` as lambda method
+]
+---
+# Translation of Lambdas
+.left-column-20[
+## Desugar
+## Replace 
+## Why
+]
+.right-column-75[
+> In selecting a strategy, there are two competing goals: maximizing flexibility for future optimization by not committing to a specific strategy, vs providing stability in the classfile representation. We can achieve both of these goals by using the invokedynamic feature [...].([Translation of Lambda Expressions](http://cr.openjdk.java.net/~briangoetz/lambda/lambda-translation.html), Brian Goetz 2012)
+
+- `invokeDynamic` shifts Byte Code generation from compile time to run time
+
+- Depending on the context different translation strategies may be used
+
+- Translation of Lambdas can easily profit from new JVM features (cf. value types)
+]
+---
+# Translation of Lambdas
+.left-column-20[
+## Desugar
+## Replace 
+## Why
+## Perfomance
+]
+.right-column-75[
+- To Do
+]
+---
+# Translation of Lambdas
+
+```Java
+public static void main(String[] args){
+*   Function<String, String> f = a -> a;
+    f.apply("hello");
+}
+```
+--
+```Java
+public static void main(java.lang.String[]);
+   Code:
+*      0: invokedynamic #2,  0              
+       5: astore_1
+       6: aload_1
+       7: ldc           #3
+*      9: invokeinterface #4,  2
+       14: pop
+       15: return
+
+*private static java.lang.String lambda$main$0(java.lang.String);
+   Code:
+       0: aload_0
+       1: areturn
+```
         </textarea>
         <script src="remark-latest.min.js">
         </script>
