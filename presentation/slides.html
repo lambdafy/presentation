@@ -200,7 +200,12 @@ music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 
 ---
-# Composition over inheritance 
+# Code reuse
+
+How do we reuse code in OOP?
+
+--
+
 > "Favor 'object composition' over 'class inheritance'." (Gang of Four 1995:20)
 
 > "Favor composition over inheritance." (Effective Java, Joshua Bloch 2001)
@@ -231,7 +236,8 @@ music.play(); // Producing Drum and Bass with famous Lenzman.
 
 ![:scale 80%](images/composition.png)
 
---
+---
+# Function Composition - Simple Example
 ```Java
     Function<Integer, Integer> squared = a -> a * a;
     Function<Integer, Integer> negated = a -> -a;
@@ -240,31 +246,40 @@ music.play(); // Producing Drum and Bass with famous Lenzman.
     squaredAndNegated.apply(4); // -16
 ```
 
+--
+
+![:scale 80%](images/math-composition.png)
+
+
 ---
 # Function Composition in Java 8
 ```Java
-    Function<Artist, Music> writeSomeRandomMusic = Music::new;
-    Function<Music, Track> recordTheMusic = Track::new;
+    Function<Artist, Music> writeMusic = Music::new;
+    Function<Music, Track> recordMusic = Track::new;
 *   Function<Artist, Track> produceTrack =
-*     recordTheMusic.compose(writeSomeRandomMusic);
+*     recordMusic.compose(writeMusic);
 ```
+
+--
+
+![:scale 80%](images/music-composition.png)
 
 
 ---
 # Music production pipeline 
 ```Java
-    Function<Artist, Music> writeSomeRandomMusic = Music::new;
-    Function<Music, Track> recordTheMusic = Track::new;
-    Function<List<Track>, Album> publishTheAlbum = Album::new;
+    Function<Artist, Music> writeMusic = Music::new;
+    Function<Music, Track> recordMusic = Track::new;
+    Function<List<Track>, Album> publishAlbum = Album::new;
 
     Function<Artist, Track> produceTrack =
-    recordTheMusic.compose(writeSomeRandomMusic);
+      recordMusic.compose(writeMusic);
 *   Function<Artist, List<Track>> produceTracks = ???
-    Function<Artist, Album> produceTheAlbum =
-    publishTheAlbum.compose(produceTracks);
+    Function<Artist, Album> produceAlbum =
+      publishAlbum.compose(produceTracks);
 
     Artist someArtist = new Artist("Some Artist");
-    produceTheAlbum.apply(someArtist); // And we get the Album in the end
+    produceAlbum.apply(someArtist); // And we get the Album in the end
 ```
 
 ---
@@ -273,15 +288,15 @@ music.play(); // Producing Drum and Bass with famous Lenzman.
 # Composition with High-Order functions
 show examples not only with streams but also with other things like ComposibleFutures, Options, etc.
 
-    # reduce
+# reduce
 
-    # map
+# map
 
-    # filter
+# filter
 
-    # Context
+# Context
 
-    # flatMap
+# flatMap
     show examples with streams, ComposibleFutures, Observables, Options
 
 ---
