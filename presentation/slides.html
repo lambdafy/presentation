@@ -293,7 +293,10 @@ show examples not only with streams but also with other things like ComposibleFu
 Lambda bodies are lowered to private methods
 
 ```Java
-Function<String, String> f = a -> a;
+public static void main(String[] args){
+*   Function<String, String> f = a -> a;
+    f.apply("hello");
+}
 ```
 ```Java
 private static String lambda$main$0(String a){
@@ -321,6 +324,8 @@ At runtime
 - first `MethodHandle` identifies `Function.apply` as the functional interface method to which the lambda is being converted
 
 - second `MethodHandle` identifies `lambda$main$0` as lambda method
+
+JDK8: `CallSite` creates an inner-class-like class (see [`InnerClassLambdaMetafactory`](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8-b132/java/lang/invoke/InnerClassLambdaMetafactory.java))
 ]
 ---
 # Translation of Lambdas
@@ -347,34 +352,34 @@ At runtime
 ## Perfomance
 ]
 .right-column-75[
-- To Do
+### Google Results: java 8 lambda performance
+
+- Java 8 lambda performance is not great
+
+- How Java 8 Lambdas and Streams Can Make Your Code 5 Times slower
+
+- Big execution time difference between java Lambda vs Anonymous class
+
 ]
 ---
 # Translation of Lambdas
+.left-column-20[
+## Desugar
+## Replace 
+## Why
+## Perfomance
+]
+.right-column-75[
+### Lambda expressions vs. data structures 
+- Lambda expressions are on par and most often better than compareable imparative constructs [[1]](http://worldcomp-proceedings.com/proc/p2015/SER2509.pdf) 
 
-```Java
-public static void main(String[] args){
-*   Function<String, String> f = a -> a;
-    f.apply("hello");
-}
-```
---
-```Java
-public static void main(java.lang.String[]);
-   Code:
-*      0: invokedynamic #2,  0              
-       5: astore_1
-       6: aload_1
-       7: ldc           #3
-*      9: invokeinterface #4,  2
-       14: pop
-       15: return
+- Due to advanced implementation techniques lambda expressions are much faster compared to same constrcuts in Scala or C#/F# [[2]](http://cgi.di.uoa.gr/~biboudis/clashofthelambdas.pdf)
 
-*private static java.lang.String lambda$main$0(java.lang.String);
-   Code:
-       0: aload_0
-       1: areturn
-```
+- There is no runtime optimizaton for `Stream`s resulting in lower parallel perfomance compared to optimized constructs in Scala or C#/F# [[2]](http://cgi.di.uoa.gr/~biboudis/clashofthelambdas.pdf)
+
+- Sequential streams are not faster than loops. Parallel streams may not be faster than sequential streams (cf. initialization costs). [[3]](https://jaxenter.com/java-performance-tutorial-how-fast-are-the-java-8-streams-118830.html)
+
+]
         </textarea>
         <script src="remark-latest.min.js">
         </script>
