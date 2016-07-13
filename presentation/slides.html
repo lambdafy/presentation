@@ -21,20 +21,20 @@
              font-style: italic;
          }
 
-      .left-column-20 {
-        color: #777;
-        width: 20%;
-        height: 92%;
-        float: left;
-      }
-        .left-column-20 h2:last-of-type, .left-column-20 h3:last-child {
-          color: #000;
-        }
-      .right-column-75 {
-        width: 75%;
-        float: right;
-        padding-top: 1em;
-      }
+         .left-column-20 {
+             color: #777;
+             width: 20%;
+             height: 92%;
+             float: left;
+         }
+         .left-column-20 h2:last-of-type, .left-column-20 h3:last-child {
+             color: #000;
+         }
+         .right-column-75 {
+             width: 75%;
+             float: right;
+             padding-top: 1em;
+         }
 
          .left-column {
              color: #777;
@@ -51,7 +51,6 @@
              float: right;
              padding-top: 1em;
          }
-
 
         </style>
     </head>
@@ -148,7 +147,9 @@ What we get:
 
 ---
 # SRP (Single Responsibility Principle)
-
+- Heard about this?
+- Apply to the max
+  - Functional interface
 ---
 
 # Functional interfaces (SAM) 
@@ -228,7 +229,7 @@ How do we reuse code in OOP?
 ---
 # Function Composition
 ```Java
-  Function<A, C> compose(Function<B, C> g, Function<A, B> f) =
+Function<A, C> compose(Function<B, C> g, Function<A, B> f) =
     a -> g.apply(f.apply(a));
 ```
 
@@ -239,11 +240,10 @@ How do we reuse code in OOP?
 ---
 # Function Composition - Simple Example
 ```Java
-    Function<Integer, Integer> squared = a -> a * a;
-    Function<Integer, Integer> negated = a -> -a;
-*   Function<Integer, Integer> squaredAndNegated =
-*     negated.compose(squared);
-    squaredAndNegated.apply(4); // -16
+Function<Integer, Integer> squared = a -> a * a;
+Function<Integer, Integer> negated = a -> -a;
+*Function<Integer, Integer> squaredAndNegated = negated.compose(squared);
+squaredAndNegated.apply(4); // -16
 ```
 
 --
@@ -254,10 +254,9 @@ How do we reuse code in OOP?
 ---
 # Function Composition in Java 8
 ```Java
-    Function<Artist, Music> writeMusic = Music::new;
-    Function<Music, Track> recordMusic = Track::new;
-*   Function<Artist, Track> produceTrack =
-*     recordMusic.compose(writeMusic);
+Function<Artist, Music> writeMusic = Music::new;
+Function<Music, Track> recordMusic = Track::new;
+*Function<Artist, Track> produceTrack = recordMusic.compose(writeMusic);
 ```
 
 --
@@ -268,18 +267,16 @@ How do we reuse code in OOP?
 ---
 # Music production pipeline 
 ```Java
-    Function<Artist, Music> writeMusic = Music::new;
-    Function<Music, Track> recordMusic = Track::new;
-    Function<List<Track>, Album> publishAlbum = Album::new;
+Function<Artist, Music> writeMusic = Music::new;
+Function<Music, Track> recordMusic = Track::new;
+Function<List<Track>, Album> publishAlbum = Album::new;
 
-    Function<Artist, Track> produceTrack =
-      recordMusic.compose(writeMusic);
-*   Function<Artist, List<Track>> produceTracks = ???
-    Function<Artist, Album> produceAlbum =
-      publishAlbum.compose(produceTracks);
+Function<Artist, Track> produceTrack = recordMusic.compose(writeMusic);
+*Function<Artist, List<Track>> produceTracks = ???
+Function<Artist, Album> produceAlbum = publishAlbum.compose(produceTracks);
 
-    Artist someArtist = new Artist("Some Artist");
-    produceAlbum.apply(someArtist); // And we get the Album in the end
+Artist someArtist = new Artist("Some Artist");
+produceAlbum.apply(someArtist); // And we get the Album in the end
 ```
 
 ---
@@ -299,6 +296,10 @@ show examples not only with streams but also with other things like ComposibleFu
 # flatMap
     show examples with streams, ComposibleFutures, Observables, Options
 
+---
+# Quiz
+What is the size of the this set?
+- To Do
 ---
 # Translation of Lambdas
 .left-column-20[
