@@ -295,8 +295,22 @@ show examples not only with streams but also with other things like ComposibleFu
 
 ---
 # Quiz
-What is the size of the this set?
-- To Do
+```Java
+public void quiz(){
+    Set<Function<String, String>> functions = new HashSet<>();
+
+    functions.add(a -> a);
+    functions.add(a -> a);
+    functions.add(createNiceFunction());
+    functions.add(createNiceFunction());
+
+    System.out.println(functions.size()); // Output?
+}
+
+public Function<String, String> createNiceFunction(){
+    return a -> a;
+}
+```
 ---
 # Translation of Lambdas
 .left-column-20[
