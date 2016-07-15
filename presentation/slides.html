@@ -53,7 +53,6 @@
              width: 50%;
              height: 100%;
              float: right;
-             padding-top: 1em;
          }
 
         </style>
@@ -149,8 +148,65 @@ What we get:
 ---
 # Single Responsibility Principle (SRP)
 > We want our systems to be composed of many small classes, not a few large ones. Each small class encapsulates a single responsibility, has a single reason to change, and collaborates with a few others to achieve the desired system behaviors. (Clean Code, Robert C. Martin, 2008) 
----
+--
 
+
+.left-column[```Java
+class Artist {
+  String name;
+  String email;
+
+  Artist(String name, String email) {
+    this.name = name;
+    this.email = email;
+  }
+
+  String getName() { return name; }
+  String getEmail() { return email; }
+
+*  boolean isValid() {
+*    return email.contains("@");
+*  }
+}
+```]
+--
+.right-column[```Java
+class Artist {
+  Artist(String name, Email email) {
+    this.name = name;
+    this.email = email;
+  }
+ // ...
+}
+class Email {
+  final String email;
+  Email(String eMail) {
+    this.email = eMail;
+  }
+*  boolean isValid(){
+*    return email.contains("@");
+*  }
+}
+```]
+---
+# Single Responsibility Principle (SRP)
+`isValid` is just a function from `String` to `Boolean`
+```Java
+Function<Artist, Boolean> containsAtSign = artist -> artist.email.contains("@"); 
+containsAtSign.apply(new Artist("Lenzman","lenzman@music.org"));
+```
+We should stay in the domain
+```Java
+interface ArtistValidator extends Function<Artist, Boolean>{
+  static ArtistValidator containsAtSign(){
+     return artist -> artist.email.contains("@");
+  }
+}
+
+containsAtSign().apply(new Artist("Lenzman", "lenzman@music.org"));
+```
+Functions operate on state and have a single responsiblity.
+---
 # Functional interfaces (SAM) 
 ```Java
 Label label = new HospitalRecords();
