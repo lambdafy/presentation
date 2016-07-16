@@ -63,31 +63,19 @@ class: center, middle
 # Use functions for a greater good
 .footnote[By [Artem Kozlov](https://twitter.com/_akozlov) and [Gregor Trefs](https://twitter.com/gtrefs)]
 ---
-# Is OOP the Holy Grail?
+# Promises of OOP
 
-# Some promises of OOP
-
-Reuse - OOP makes programming faster and easier because of the reuse of existing, previously tested classes from a library.  Reuse can also be accomplished by inheritance.
-
---
-
-# Code Reuse
-
-> Reusability has been difficult to achieve on early object-oriented projects because class libraries are not inherently very reusable. Searching through a class library, and understanding the details of code used to build the classes, can often cost more than rebuilding the classes from scratch."
->
-> <footer>
-            - <cite>The Object Technology Architecture: Business Objects for Corporate Information Systems
-            Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings</cite>
-</footer>
+**Reuse**  - OOP makes programming faster and easier because of the reuse of existing, previously tested classes from a library.  Reuse can also be accomplished by inheritance.
 
 ---
 
-# But still they were quite optimistic ...
+# Code Reuse
 
-> "By 1997, it will be possible to buy 50% of an application as off-the-shelf components, effectively doubling productivity. By 1998, early adopters will be buying 50% of the application as external components and reusing internally generated components for another 25% of the application, effectively doubling productivity on an annual basis"
+> Reusability has been difficult to achieve on early object-oriented projects because class libraries are not inherently very reusable. Searching through a class library, and understanding the details of code used to build the classes, can often cost more than rebuilding the classes from scratch. [...] 
 
-The Object Technology Architecture: Business Objects for Corporate Information Systems
-Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings
+--
+
+> By 1997, it will be possible to buy 50% of an application as off-the-shelf components, effectively doubling productivity. By 1998, early adopters will be buying 50% of the application as external components and reusing internally generated components for another 25% of the application, effectively doubling productivity on an annual basis (OOPSLA 1995 Workshop proceedings)
 
 --
 
@@ -101,10 +89,9 @@ Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings
 
 > “Sometimes, the elegant implementation is just a function. Not a method. Not a class. Not a framework. Just a function.” – John Carmack
 
----
-# What is a Function?
+--
 
-> In mathematics, a function is a relation between a set of inputs and a set of permissible outputs with the property that each input is related to exactly one output. An example is the function that relates each real number x to its square x2.
+A function is a relation between a set of inputs and a set of permissible outputs with the property that each input is related to exactly one output.
 
 --
 .left-column[
@@ -200,6 +187,7 @@ class Email {
 
 isValid("lenzman@music.org");
 ```
+--
 and this can be modeled as a pure function
 ```Java
 *Function<String, Boolean> containsAtSign = email -> email.contains("@");
@@ -476,6 +464,7 @@ class: center, middle
 
 [Fernandez, David, et al. "Has the Object-Oriented Paradigm Kept Its Promise?" (2002, APA)](http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesAndReality.pdf)
 
+The Object Technology Architecture: Business Objects for Corporate Information Systems Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings
         </textarea>
         <script src="remark-latest.min.js">
         </script>
