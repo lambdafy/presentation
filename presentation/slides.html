@@ -147,7 +147,7 @@ What we get:
 
 ---
 # Single Responsibility Principle (SRP)
-> We want our systems to be composed of many small classes, not a few large ones. Each small class encapsulates a single responsibility, has a single reason to change, and collaborates with a few others to achieve the desired system behaviors. (Clean Code, Robert C. Martin, 2008) 
+> We want our systems to be composed of **many small classes**, not a few large ones. Each small class encapsulates a single responsibility, has a **single reason to change**, and **collaborates with a few others** to achieve the desired system behaviors. (Clean Code, Robert C. Martin, 2008) 
 --
 
 
@@ -190,22 +190,22 @@ class Email {
 ```]
 ---
 # Single Responsibility Principle (SRP)
-`isValid` is just a function from `String` to `Boolean`
+`isValid` is a query about the state of the `Email`
 ```Java
-Function<Artist, Boolean> containsAtSign = artist -> artist.email.contains("@"); 
-containsAtSign.apply(new Artist("Lenzman","lenzman@music.org"));
-```
-We should stay in the domain
-```Java
-interface ArtistValidator extends Function<Artist, Boolean>{
-  static ArtistValidator containsAtSign(){
-     return artist -> artist.email.contains("@");
-  }
+class Email {
+*  static boolean isValid(String email){
+*    return email.contains("@");
+*  }
 }
 
-containsAtSign().apply(new Artist("Lenzman", "lenzman@music.org"));
+isValid("lenzman@music.org");
 ```
-Functions operate on state and have a single responsiblity.
+and this can be modeled as a pure function
+```Java
+*Function<String, Boolean> containsAtSign = email -> email.contains("@");
+
+containsAtSign.apply("lenzman@music.org");
+```
 ---
 # Functional interfaces (SAM) 
 ```Java
