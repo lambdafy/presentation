@@ -1,7 +1,9 @@
+package srp;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import static SRP.functionalCombinatorSrp.ArtistValidator.*;
+import static srp.SRP.functionalCombinatorSrp.ArtistValidator.*;
 
 public class SRP {
 
@@ -118,17 +120,25 @@ public class SRP {
 
         interface ArtistValidator extends Function<Artist, Optional<Artist>>{
             static ArtistValidator hasMailWithAtSign(){
-                return artist -> artist.email.contains("@")?Optional.of(artist):Optional.empty();
+                return holds(artist -> artist.email.contains("@"));
             }
 
-            static ArtistValidator nameIsNotEmpty(ArtistValidator other){
-                return artist -> artist.name.trim().length()>0?other.apply(artist):Optional.empty();
+            static ArtistValidator nameIsNotEmpty(){
+                return holds(artist -> artist.name.trim().length()>0);
+            }
+
+            static ArtistValidator holds(Function<Artist, Boolean> p){
+                return artist -> p.apply(artist)?Optional.of(artist):Optional.empty();
+            }
+
+            default ArtistValidator and(ArtistValidator other){
+                return artist -> apply(artist).flatMap(other);
             }
         }
 
         class ArtistService{
             public Optional<Artist> createArtistWithValidatedEmailAndName(String name, String mail){
-                final ArtistValidator validator = nameIsNotEmpty(hasMailWithAtSign());
+                final ArtistValidator validator = nameIsNotEmpty().and(hasMailWithAtSign());
                 return validator.apply(new Artist(name, mail));
             }
         }
