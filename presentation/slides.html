@@ -272,8 +272,9 @@ How do we reuse code in OOP?
 ---
 # Function Composition
 ```Java
-Function<A, C> compose(Function<B, C> g, Function<A, B> f) =
-    a -> g.apply(f.apply(a));
+Function<A, C> compose(Function<B, C> g, Function<A, B> f) { 
+    return a -> g.apply(f.apply(a));
+}
 ```
 
 --
@@ -281,7 +282,7 @@ Function<A, C> compose(Function<B, C> g, Function<A, B> f) =
 ![:scale 80%](images/composition.png)
 
 ---
-# Function Composition - Simple Example
+# Function Composition
 ```Java
 Function<Integer, Integer> squared = a -> a * a;
 Function<Integer, Integer> negated = a -> -a;
@@ -295,7 +296,7 @@ squaredAndNegated.apply(4); // -16
 
 
 ---
-# Function Composition in Java 8
+# Function Composition
 ```Java
 Function<Artist, Music> writeMusic = Music::new;
 Function<Music, Track> recordMusic = Track::new;
