@@ -284,20 +284,6 @@ Function<A, C> compose(Function<B, C> g, Function<A, B> f) {
 ---
 # Function Composition
 ```Java
-Function<Integer, Integer> squared = a -> a * a;
-Function<Integer, Integer> negated = a -> -a;
-*Function<Integer, Integer> squaredAndNegated = negated.compose(squared);
-squaredAndNegated.apply(4); // -16
-```
-
---
-
-![:scale 80%](images/math-composition.png)
-
-
----
-# Function Composition
-```Java
 Function<Artist, Music> writeMusic = Music::new;
 Function<Music, Track> recordMusic = Track::new;
 *Function<Artist, Track> produceTrack = recordMusic.compose(writeMusic);
