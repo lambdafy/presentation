@@ -327,6 +327,34 @@ show examples not only with streams but also with other things like ComposibleFu
     show examples with streams, ComposibleFutures, Observables, Options
 
 ---
+# Combinators
+
+Use **combinators** to combine **simple** primitives into more complex structures.
+
+```Java
+interface ArtistValidator extends Function<Artist, Optional<Artist>>{
+    static ArtistValidator hasMailWithAtSign(){
+        return holds(artist -> artist.email.contains("@"));
+    }
+
+    static ArtistValidator nameIsNotEmpty(){
+        return holds(artist -> artist.name.trim().length()>0);
+    }
+
+    static ArtistValidator holds(Function<Artist, Boolean> p){
+        return artist -> p.apply(artist)?Optional.of(artist):Optional.empty();
+    }
+
+    default ArtistValidator and(ArtistValidator other){
+        return artist -> apply(artist).flatMap(other);
+    }
+}
+
+ArtistValidator validator = nameIsNotEmpty().and(hasMailWithAtSign());
+validator.apply(new Artist("Lenzman", "lenz@dnb.com")); // valid 
+validator.apply(new Artist("", "lenz@dnb.com")); // invalid 
+```
+---
 # Quiz
 ```Java
 public void quiz(){
