@@ -43,25 +43,26 @@ A function is a relation between a set of inputs and a set of permissible output
 ---
 # Pure Functions
 
-> A pure function is a function which: Given the same input, will always return the same output. Produces no side effects.
+> “A pure function is a function which: Given the same input, will always return the same output. Produces no side effects.” - Wikipedia
 
 --
 
-> In computer science, a function or expression is said to have a side effect if, in addition to returning a value, it also modifies some state or has an observable interaction with calling functions or the outside world.
+> “In computer science, a function or expression is said to have a side effect if, in addition to returning a value, it also modifies some state or has an observable interaction with calling functions or the outside world.” - Wikipedia
 
 ---
-# Pure Functions
+# Quiz (Functions)
 
 .center[
 ![:scale 30%](images/function.png)
 ]
---
-
-What would be the result of: `f(a) -> ???`
 
 --
 
-What we expect: `f(a) -> 2`
+What would be the result of: f(a) -> ???
+
+--
+
+What we expect: f(a) -> 2
 
 --
 
@@ -73,7 +74,7 @@ What we get:
 
 ---
 # Single Responsibility Principle (SRP)
-> We want our systems to be composed of **many small classes**, not a few large ones. Each small class encapsulates a single responsibility, has a **single reason to change**, and **collaborates with a few others** to achieve the desired system behaviors. (Clean Code, Robert C. Martin, 2008) 
+> We want our systems to be composed of **many small classes**, not a few large ones. Each small class encapsulates a single responsibility, has a **single reason to change**, and **collaborates with a few others** to achieve the desired system behaviors. - (Clean Code, Robert C. Martin, 2008) 
 --
 
 
@@ -183,7 +184,7 @@ music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 
 ---
-# Code reuse
+# Composition in OOP
 
 How do we reuse code in OOP?
 
@@ -192,21 +193,6 @@ How do we reuse code in OOP?
 > "Favor 'object composition' over 'class inheritance'." (Gang of Four 1995:20)
 
 > "Favor composition over inheritance." (Effective Java, Joshua Bloch 2001)
-
---
-
-    But how to properly compose classes?
-
-    interface A {
-    G doSomeStuff();
-    C doSomeOtherStuff();
-    }
-
-    interface B {
-
-    }
-
-    How to compose A and B
 
 ---
 # Function Composition
@@ -218,9 +204,29 @@ How do we reuse code in OOP?
 
 --
 
-![:scale 80%](images/composition.png)
+.center[
+  ![:scale 80%](images/composition.png)
+]
 
 ---
+
+# Function Composition
+
+```Java
+Function<Integer, Integer> squared = a -> a * a;		
+Function<Integer, Integer> negated = a -> -a;		
+*Function<Integer, Integer> squaredAndNegated = negated.compose(squared);		
+squaredAndNegated.apply(4); // -16		
+```
+
+--
+
+.center[
+  ![:scale 80%](images/math-composition.png)		
+]
+
+---
+
 # Function Composition
 ```Java
 Function<Artist, Music> writeMusic = Music::new;
@@ -230,8 +236,9 @@ Function<Music, Track> recordMusic = Track::new;
 
 --
 
-![:scale 80%](images/music-composition.png)
-
+.center[
+  ![:scale 80%](images/music-composition.png)
+]
 
 ---
 # Music production pipeline 
@@ -251,13 +258,17 @@ produceAlbum.apply(someArtist); // And we get the Album in the end
 
 ---
 # Composition with High-Order functions
-Higher-order function is a function that takes one or more functions as arguments.
+> A higher-order function is a function that takes other functions as arguments or returns a function as result. - Haskell Wiki
 
 --
 
-There is a big chance that you've already used them in other programming languages:
+There is a big chance that you've already used them in other programming languages, like JavaScript:
 
-map, forEach, flatMap, filter, reduce, etc
+ * map
+ * flatMap
+ * filter
+ * reduce
+ * .. etc
 
 ---
 
@@ -273,23 +284,29 @@ Applies given function to each element of input and puts result in output.
 
 --
 
-![:scale 80%](images/map.png)
-
+.center[
+  ![:scale 80%](images/map.png)
+]
 --
 
+##### Example
+
 ```Java
-List<Integer> numbers;
+List<Integer> numbers = createRandomNumbers();
 List<Character> letters =
-    numbers.stream().map(
-        n -> Character.forDigit(n, 10)
-    ).collect(Collectors.toList());
+    numbers.stream()
+      .map(n -> Character.forDigit(n, 10))
+      .collect(Collectors.toList());
 
 ```
 
+--
 ```Java
-List<Music> music;
-List<Track> tracks =
-    music.stream().map(recordTheMusic).collect(Collectors.toList());
+final Function<Artist, List<Track>> produceTracks =
+  artist -> 
+    Arrays.stream(new int[]{1, 2, 3, 4, 5, 6, 7, 8})
+      .map(i -> produceTrack.apply(artist))
+      .collect(Collectors.toList());
 ```
 
 ---
@@ -302,13 +319,18 @@ Applies given function to content of the Optional and puts result in output.
 ```
 
 --
+##### Example
+
 Lets say we need to get address for some Artist, but we know that some of them do not have any.
 ```Java
 Optional<Artist> find(List<Artist> a, String name);
 
-// find artist by name and if found one then return it address otherwise return string "UNKNOWN"
+// find artist by name and if found, 
+// return it address otherwise return string "UNKNOWN"
 String address = 
-    find(artists, "Michael Jackson").map(artist -> artist.address).orElse("UNKNOWN");
+    find(artists, "Michael Jackson")
+      .map(artist -> artist.address)
+      .orElse("UNKNOWN");
   
 ```
 
@@ -321,9 +343,10 @@ Applies given function to completed future content and puts result in output.
 <X,Y> CompletableFuture<Y> map(CompletableFuture<X> xs, Function<X, Y> f);
 ```
 --
-But unfortunately in JDK this method is called `thenApply`.
+_But unfortunately in JDK this method is called `thenApply`._
 
 --
+##### Example
 
 Lets say we want to download Tracks for some artist and then return their names.
 ```Java
@@ -331,8 +354,10 @@ CompletableFuture<Track> download(Artist artist);
 
 // download all tracks for the given Artist and get their names
 CompletableFuture<List<String>> address = 
-    download(artist).thenApply(
-        tracks -> tracks.stream().map(track -> track.name).collect(Collectors.toList())
+    download(artist).thenApply(tracks -> 
+        tracks.stream()
+          .map(track -> track.name)
+          .collect(Collectors.toList())
     );
   
 ```
@@ -347,7 +372,7 @@ So different but similar at the same time:
 ```
 
 --
-##Quiz
+#### Quiz
 What is the name of this abstraction:
 
 * ThingThatCanBeMappedOver
@@ -367,9 +392,13 @@ Map a function over a collection and flatten the result by one-level
 ```
 
 --
-
-![:scale 80%](images/flat-map.png)
+.center[
+  ![:scale 80%](images/flat-map.png)
+]
 --
+
+##### Example
+Example will be here
 
 ---
 
@@ -383,6 +412,7 @@ Map a function over an Optional and flatten the result by one-level
 <X,Y> Optional<Y> flatMap(Optional<X> xs, Function<X, Optional<Y>> f);
 ```
 --
+##### Example
 
 Lets say we need to get address for some Artist, but we know that some of them do not have any.
 ```Java
@@ -392,7 +422,10 @@ Optional<String> phoneNumber(String address);
 // find artist by name and if found one then get phone numebr for the address 
 // otherwise return string "UNKNOWN"
 String phone = 
-    find(artists, "Michael Jackson").map(artist -> artist.address).map(phoneNumber).orElse("UNKNOWN");
+    find(artists, "Michael Jackson")
+      .map(artist -> artist.address)
+      .flatMap(phoneNumber)
+      .orElse("UNKNOWN");
   
 ```
 
@@ -408,16 +441,18 @@ Map a function over a CompletableFuture and flatten the result by one-level
 <X,Y> CompletableFuture<Y> flatMap(CompletableFuture<X> xs, Function<X, CompletableFuture<Y>> f);
 ```
 --
-And again, unfortunately in JDK this method is called `thenCompose`.
+
+_And again, unfortunately in JDK this method is called `thenCompose`._
 
 --
+##### Example
 
 ```Java
 CompletableFuture<Track> download(String name);
 CompletableFuture<Void> play(Track track);
 
 // download some track and then play it on some remote device
- download(trackName).thenCompose(play);
+download(trackName).thenCompose(play);
   
 ```
 
@@ -442,6 +477,15 @@ What is the name of this abstraction:
 
 ---
 
+# Abstractions In Functional Programming
+
+.center[
+  ![:scale 100%](images/Typeclassopedia-diagram.png)
+]
+
+_https://wiki.haskell.org/Typeclassopedia_
+
+---
 
 # Combinators
 
@@ -586,12 +630,16 @@ JDK8: `CallSite` creates an inner-class-like class (see [`InnerClassLambdaMetafa
 
 ]
 ---
-# Java is not Functional Programming Language
+# Summary
 
-Please do not try to blindly use Functional Programming with Java. It will bite you hard ...
+* Java is not Functional Programming Language ...
+* Concepts from FP can be useful in day-to-day Java programming.
 
---
-Learn You a Haskell for Great Good!
+---
+.center[
+# Learn You a Haskell for Great Good!
+![:scale 50%](images/haskell-book-cover.png)
+]
 
 ---
 class: center, middle
@@ -605,63 +653,3 @@ class: center, middle
 [Fernandez, David, et al. "Has the Object-Oriented Paradigm Kept Its Promise?" (2002, APA)](http://ddi.cs.uni-potsdam.de/HyFISCH/Informieren/Programmiersprachen/OOPromisesAndReality.pdf)
 
 The Object Technology Architecture: Business Objects for Corporate Information Systems Business Object Design and Implementation: OOPSLA ’95 Workshop Proceedings
-
-
-
-
----
-
-# I'm not sure if we want to have it
-# filter (Stream)
-
-Runs a boolean function on each element and only puts those that pass into the output.
-
---
-```Java
-<X> Stream<X> map(Stream<X> xs, Function<X, Boolean> p);
-```
-
---
-
-![:scale 80%](images/filter.png)
-
---
-
----
-
-# reduce
-
-Uses the supplied function to combine the input elements, often to a single output value
-
---
-
-```Java
-<X,Y> Y reduce(Stream<X> xs, Y acc, Function<X, Y> f);
-```
-
---
-![:scale 80%](images/filter.png)
---
-
-```Java
-List<Integer> numbers;
-int sum = Arrays.stream(numbers).reduce(0, (x,y) -> x+y);
-```
-
----
-# reduce (Performance Quiz)
-
-What is wrong with the code:
-
-```Java
-List<Integer> numbers;
-int sum = numbers.stream().reduce(0, (x,y) -> x+y);
-```
-
---
-*Primitives boxing and unboxing!*
-
---
-```Java
-numbers.stream().mapToInt(x -> x).sum();
-```
