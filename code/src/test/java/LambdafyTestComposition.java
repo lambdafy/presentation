@@ -71,6 +71,8 @@ public class LambdafyTestComposition {
         final Function<Artist, Album> produceTheAlbum =  publishTheAlbum.compose(produceTracks);
 
         Artist someArtist = new Artist("Some Artist");
-        produceTheAlbum.apply(someArtist);
+        Stream.generate(() -> 1).limit(10).mapToInt(i -> i).sum();  produceTheAlbum.apply(someArtist);
     }
+
+
 }
