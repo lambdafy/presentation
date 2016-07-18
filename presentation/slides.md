@@ -184,17 +184,6 @@ music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 
 ---
-# Composition in OOP
-
-How do we reuse code in OOP?
-
---
-
-> "Favor 'object composition' over 'class inheritance'." (Gang of Four 1995:20)
-
-> "Favor composition over inheritance." (Effective Java, Joshua Bloch 2001)
-
----
 # Function Composition
 ```Java
 <X,Y,Z> Function<X, Z> compose(Function<Y, Z> f, Function<X, Y> g) {
