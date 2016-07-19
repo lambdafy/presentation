@@ -1,10 +1,40 @@
 class: center, middle
 # Use functions for a greater good
 .footnote[By [Artem Kozlov](https://twitter.com/_akozlov) and [Gregor Trefs](https://twitter.com/gtrefs)]
+
+---
+
+.center[
+![:scale 65%](images/Florida-Grapefruit-Propaganda_1.png)
+]
+
 ---
 # Promises of OOP
 
-**Reuse**  - OOP makes programming faster and easier because of the reuse of existing, previously tested classes from a library.  Reuse can also be accomplished by inheritance.
+* Naturalness - OOP models the real world better because everything in the
+world is an object.
+
+--
+
+* Reuse - OOP makes programming faster and easier because of the reuse of
+existing, previously tested classes from a library. Reuse can also be
+accomplished by inheritance.
+
+--
+
+* Development Life Cycle - OOP makes faster development of programs
+because rapid prototyping of models is achieved due to the reuse of
+existing models of a corporations processes.
+
+--
+
+* Maintenance - OOP makes maintenance easier because code only needs to
+be changed in one place. This is made possible by encapsulation.
+
+--
+
+* Quality - OOP makes testing easier and more reliable because components
+are existing and previously tested.
 
 ---
 
@@ -18,7 +48,7 @@ class: center, middle
 
 --
 
-# But still OOP is on the rise
+# But still classes are everywhere
 * object-oriented COBOL 2002 ISO standard
 * ECMAScript 6 with classes
 
