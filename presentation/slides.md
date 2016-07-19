@@ -60,7 +60,7 @@ are existing and previously tested.
 
 --
 
-A function is a relation between a set of inputs and a set of permissible outputs with the property that each input is related to exactly one output.
+A function is a **relation** between a set of inputs and a set of permissible outputs with the property that each **input** is related to exactly **one output**.
 
 --
 .left-column[
@@ -73,11 +73,11 @@ A function is a relation between a set of inputs and a set of permissible output
 ---
 # Pure Functions
 
-> “A pure function is a function which: Given the same input, will always return the same output. Produces no side effects.” - Wikipedia
+> “A **pure function** is a function which: Given the *same input*, will always return the *same output*. Produces no **side effects**.” - <small>Wikipedia</small>
 
 --
 
-> “In computer science, a function or expression is said to have a side effect if, in addition to returning a value, it also modifies some state or has an observable interaction with calling functions or the outside world.” - Wikipedia
+> “In computer science, a function or expression is said to have a **side effect** if, in addition to returning a value, it also modifies some **state** or has an observable interaction with calling functions or the outside world.” - <small>Wikipedia</small>
 
 ---
 # Quiz (Functions)
@@ -214,20 +214,6 @@ music.play(); // Producing Drum and Bass with famous Lenzman.
 ```
 
 ---
-# Function Composition
-```Java
-<X,Y,Z> Function<X, Z> compose(Function<Y, Z> f, Function<X, Y> g) {
-    return a -> f.apply(g.apply(a));
-}
-```
-
---
-
-.center[
-  ![:scale 80%](images/composition.png)
-]
-
----
 
 # Function Composition
 
@@ -242,6 +228,21 @@ squaredAndNegated.apply(4); // -16
 
 .center[
   ![:scale 80%](images/math-composition.png)		
+]
+
+---
+
+# Function Composition
+```Java
+<X,Y,Z> Function<X, Z> compose(Function<Y, Z> f, Function<X, Y> g) {
+    return a -> f.apply(g.apply(a));
+}
+```
+
+--
+
+.center[
+  ![:scale 80%](images/composition.png)
 ]
 
 ---
@@ -277,7 +278,7 @@ produceAlbum.apply(someArtist); // And we get the Album in the end
 
 ---
 # Composition with High-Order functions
-> A higher-order function is a function that takes other functions as arguments or returns a function as result. - Haskell Wiki
+> A **higher-order** function is a function that takes other **functions as arguments** or **returns a function as result**. - <small>Haskell Wiki</small>
 
 --
 
@@ -293,28 +294,11 @@ There is a big chance that you've already used them in other programming languag
 
 #map (Stream)
 
-Applies given function to each element of input and puts result in output.
-
---
-
-```Java
-<X,Y> Stream<Y> map(Stream<X> xs, Function<X, Y> f);
-```
-
---
-
-.center[
-  ![:scale 80%](images/map.png)
-]
---
-
-##### Example
-
 ```Java
 List<Integer> numbers = createRandomNumbers();
 List<Character> letters =
     numbers.stream()
-      .map(n -> Character.forDigit(n, 10))
+*     .map(n -> Character.forDigit(n, 10))
       .collect(Collectors.toList());
 
 ```
@@ -324,21 +308,28 @@ List<Character> letters =
 final Function<Artist, List<Track>> produceTracks =
   artist -> 
     Arrays.stream(new int[]{1, 2, 3, 4, 5, 6, 7, 8})
-      .map(i -> produceTrack.apply(artist))
+*     .map(i -> produceTrack.apply(artist))
       .collect(Collectors.toList());
+```
+
+--
+
+Applies given function to each element of input and puts result in output.
+
+--
+
+.center[
+  ![:scale 80%](images/map.png)
+]
+
+--
+
+```Java
+<X,Y> Stream<Y> map(Stream<X> xs, Function<X, Y> f);
 ```
 
 ---
 #map (Optional)
-Applies given function to content of the Optional and puts result in output.
-
---
-```Java
-<X,Y> Optional<Y> map(Optional<X> xs, Function<X, Y> f);
-```
-
---
-##### Example
 
 Lets say we need to get address for some Artist, but we know that some of them do not have any.
 ```Java
@@ -351,21 +342,17 @@ String address =
       .map(artist -> artist.address)
       .orElse("UNKNOWN");
   
+--
+
+Applies given function to content of the Optional and puts result in output.
+
+--
+```Java
+<X,Y> Optional<Y> map(Optional<X> xs, Function<X, Y> f);
 ```
 
 ---
 #map (CompletableFuture)
-Applies given function to completed future content and puts result in output.
-
---
-```Java
-<X,Y> CompletableFuture<Y> map(CompletableFuture<X> xs, Function<X, Y> f);
-```
---
-_But unfortunately in JDK this method is called `thenApply`._
-
---
-##### Example
 
 Lets say we want to download Tracks for some artist and then return their names.
 ```Java
@@ -381,13 +368,31 @@ CompletableFuture<List<String>> address =
   
 ```
 
+--
+
+Applies given function to completed future content and puts result in output.
+
+--
+```Java
+<X,Y> CompletableFuture<Y> thenApply(CompletableFuture<X> xs, Function<X, Y> f);
+```
+--
+
+_Unfortunately in JDK this method is called `thenApply` not `map`._
+
 ---
 #map (Summary)
 So different but similar at the same time:
 ```Java
 <X,Y> Stream<Y> map(Stream<X> xs, Function<X, Y> f);
-<X,Y> Optional<Y> map(Optional<X> xs, Function<X, Y> f);
-<X,Y> CompletableFuture<Y> thenApply(CompletableFuture<X> xs, Function<X, Y> f);
+<X,Y> Optional<Y> map(Optional<X> x, Function<X, Y> f);
+<X,Y> CompletableFuture<Y> thenApply(CompletableFuture<X> x, Function<X, Y> f);
+```
+
+--
+
+```Java
+<X,Y> Context<Y> map(Context<X> x, Function<X, Y> f);
 ```
 
 --
@@ -400,9 +405,63 @@ What is the name of this abstraction:
 
 ---
 
+#flatMap (Optional)
+Lets say we want to find country code for the phone number of some artist.
+```Java
+Optional<Artist> find(List<Artist> a, String name);
+Optional<PhoneNumber> phoneNumber(Address address);
+Optional<CountryCode> countryCode(PhoneNumber phoneNumber);
+```
+
+--
+
+_Lets try to use map to combine these functions._
+
+--
+
+```Java
+// find artist by name and if found one then get phone numebr for the address 
+// otherwise return string "UNKNOWN"
+String phone = 
+    find(artists, "Michael Jackson")  // Optional<Artist>
+      .map(artist -> artist.address)  // Optional<Address>
+      .map(phoneNumber)               // Optional<Optional<PhoneNumber>>
+      .map(countryCode)               // Optional<Optional<Optional<CountryCode>>>
+      ....
+```
+--
+```Java
+String phone = 
+    find(artists, "Michael Jackson")  // Optional<Artist>
+      .map(artist -> artist.address)  // Optional<Address>
+      .flatMap(phoneNumber)           // Optional<PhoneNumber>
+      .flatMap(countryCode)           // Optional<CountryCode>
+      .orElse("UNKNOWN");             // String
+```
+
+---
+#flatMap (Optional)
+
+Map a function over an Optional and flatten the result by one-level
+--
+
+```Java
+<X,Y> Optional<Y> flatMap(Optional<X> xs, Function<X, Optional<Y>> f);
+```
+
+---
 #flatMap (Stream)
 
+Example will be here
+
+--
+
 Map a function over a collection and flatten the result by one-level
+
+--
+.center[
+  ![:scale 80%](images/flat-map.png)
+]
 
 --
 
@@ -410,61 +469,9 @@ Map a function over a collection and flatten the result by one-level
 <X,Y> Stream<Y> flatMap(Stream<X> xs, Function<X, Stream<Y>> f);
 ```
 
---
-.center[
-  ![:scale 80%](images/flat-map.png)
-]
---
-
-##### Example
-Example will be here
-
----
-
-#flatMap (Optional)
-
-Map a function over an Optional and flatten the result by one-level
-
---
-
-```Java
-<X,Y> Optional<Y> flatMap(Optional<X> xs, Function<X, Optional<Y>> f);
-```
---
-##### Example
-
-Lets say we need to get address for some Artist, but we know that some of them do not have any.
-```Java
-Optional<Artist> find(List<Artist> a, String name);
-Optional<String> phoneNumber(String address);
-
-// find artist by name and if found one then get phone numebr for the address 
-// otherwise return string "UNKNOWN"
-String phone = 
-    find(artists, "Michael Jackson")
-      .map(artist -> artist.address)
-      .flatMap(phoneNumber)
-      .orElse("UNKNOWN");
-  
-```
-
 ---
 
 # flatMap (CompletableFuture)
-
-Map a function over a CompletableFuture and flatten the result by one-level
-
---
-
-```Java
-<X,Y> CompletableFuture<Y> flatMap(CompletableFuture<X> xs, Function<X, CompletableFuture<Y>> f);
-```
---
-
-_And again, unfortunately in JDK this method is called `thenCompose`._
-
---
-##### Example
 
 ```Java
 CompletableFuture<Track> download(String name);
@@ -475,6 +482,21 @@ download(trackName).thenCompose(play);
   
 ```
 
+--
+
+Map a function over a CompletableFuture and flatten the result by one-level
+
+--
+
+```Java
+<X,Y> CompletableFuture<Y> flatMap(
+  CompletableFuture<X> xs, Function<X, CompletableFuture<Y>> f
+);
+```
+--
+
+_And again, unfortunately in JDK this method is called `thenCompose`._
+
 ---
 
 #flatMap (Summary)
@@ -482,8 +504,10 @@ download(trackName).thenCompose(play);
 So different but similar at the same time:
 ```Java
 <X,Y> Stream<Y> flatMap(Stream<X> xs, Function<X, Stream<Y>> f);
-<X,Y> Optional<Y> flatWap(Optional<X> xs, Function<X, Optional<Y>> f);
-<X,Y> CompletableFuture<Y> thenCompose(CompletableFuture<X> xs, Function<X, CompletableFuture<Y>> f);
+<X,Y> Optional<Y> flatMap(Optional<X> x, Function<X, Optional<Y>> f);
+<X,Y> CompletableFuture<Y> thenCompose(
+  CompletableFuture<X> x, Function<X, CompletableFuture<Y>> f
+);
 ```
 
 --
@@ -493,16 +517,6 @@ What is the name of this abstraction:
 * ThingThatCanBeFlatMappedOver
 * SomeStrangeLongNameFromSomeVeryWellKnownDomain
 * Monad
-
----
-
-# Abstractions In Functional Programming
-
-.center[
-  ![:scale 100%](images/Typeclassopedia-diagram.png)
-]
-
-_https://wiki.haskell.org/Typeclassopedia_
 
 ---
 
@@ -651,8 +665,29 @@ JDK8: `CallSite` creates an inner-class-like class (see [`InnerClassLambdaMetafa
 ---
 # Summary
 
+* Function is an useful abstraction that can improve reuse and maintainability of the code.
+
+--
+
+* Functions enable new types of useful abstractions.
+
+--
+
+* Performance-wise lambdas are  good enough for day-to-day use.
+
+--
+
 * Java is not Functional Programming Language ...
-* Concepts from FP can be useful in day-to-day Java programming.
+
+---
+
+# Abstractions In Functional Programming
+
+.center[
+  ![:scale 100%](images/Typeclassopedia-diagram.png)
+]
+
+_https://wiki.haskell.org/Typeclassopedia_
 
 ---
 .center[
