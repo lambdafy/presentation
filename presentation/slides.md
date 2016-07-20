@@ -112,15 +112,10 @@ What we get:
 class Artist {
   String name;
   String email;
-
   Artist(String name, String email) {
     this.name = name;
     this.email = email;
   }
-
-  String getName() { return name; }
-  String getEmail() { return email; }
-
 *  boolean isValid() {
 *    return email.contains("@");
 *  }
@@ -128,28 +123,23 @@ class Artist {
 ```]
 --
 .right-column[```Java
-class Artist {
-  Artist(String name, Email email) {
-    this.name = name;
-    this.email = email;
-  }
- // ...
-}
-class Email {
+class EmailValidator {
   final String email;
+
   Email(String eMail) {
     this.email = eMail;
   }
-*  boolean isValid(){
-*    return email.contains("@");
-*  }
+
+* boolean isValid(){
+*   return email.contains("@");
+* }
 }
 ```]
 ---
 # Single Responsibility Principle (SRP)
 `isValid` is a query about the state of the `Email`
 ```Java
-class Email {
+class EmailValidator {
 *  static boolean isValid(String email){
 *    return email.contains("@");
 *  }
