@@ -341,7 +341,7 @@ String address =
     find(artists, "Michael Jackson")
       .map(artist -> artist.address)
       .orElse("UNKNOWN");
-  
+```  
 --
 
 Applies given function to content of the Optional and puts result in output.
@@ -677,7 +677,11 @@ JDK8: `CallSite` creates an inner-class-like class (see [`InnerClassLambdaMetafa
 
 --
 
-* Java is not Functional Programming Language ...
+* Perfomance depends on the data structure
+
+--
+
+* Java is not a Functional Programming Language ...
 
 ---
 
