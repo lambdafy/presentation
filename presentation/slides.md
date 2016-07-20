@@ -522,7 +522,61 @@ What is the name of this abstraction:
 
 # Combinators
 
-Use **combinators** to combine **simple** primitives into more complex structures.
+Use **combinators** to combine simple **primitives** into more complex structures.
+
+```Java
+interface ArtistValidator extends Function<Artist, Optional<Artist>>{}
+```
+`ArtistValidator` is a function which determines whether an `Artist` is valid.
+If the validation fails, the result is `Empty` otherwise it contains the valid `Artist` instance.
+---
+# Combinators
+`ArtistValidator` **primitives** are basic validation rules.
+```Java
+static ArtistValidator hasMailWithAtSign(){
+    return a -> a.email.contains("@")?Optional.of(a):Optional.empty();
+}
+```
+`hasMailWithAtSign()` requires the artists e-mail to contain an `@` sign. If this is not the case
+`Optional.empty()` is returned to signal that the validation failed.
+--
+
+```Java
+static ArtistValidator nameIsNotEmpty(){
+    return a -> a.name.trim().length()>0?Optional.of(a):Optional.empty();
+}
+```
+`nameIsNotEmpty()` requires the artist to have mail with at least one letter. If this is not the case
+`Optional.empty()` is returned to signal that the validation failed.
+---
+# Combinators
+Manually applying each validation rule can be cumbersome. **Combinators** provide means to compose
+different `ArtistValidator`s. 
+
+```Java
+static ArtistValidator and(ArtistValidator first, ArtistValidator second){
+   return artist -> first.apply(artist).flatMap(second);
+}
+
+ArtistValidator v = and(nameIsNotEmpty(), hasMailWithAtSign());
+```
+`and()` requires that a given `Artist` is valid for all `ArtistValidator`s.
+--
+
+```Java
+static ArtistValidator or(ArtistValidator first, ArtistValidator second){
+   return artist -> {
+       Optional<Artist> a = first.apply(artist);
+       return a.isPresent()?a:second.apply(artist);
+   }
+}
+
+ArtistValidator v = or(nameIsNotEmpty(), hasMailWithAtSign());
+```
+`or()` requires that a given `Artist` is valid for at least one `ArtistValidator`.
+---
+# Combinators
+Since Java 8 `static` and `default` methods are allowed within `interface`s.
 
 ```Java
 interface ArtistValidator extends Function<Artist, Optional<Artist>>{
@@ -547,6 +601,10 @@ ArtistValidator validator = nameIsNotEmpty().and(hasMailWithAtSign());
 validator.apply(new Artist("Lenzman", "lenz@dnb.com")); // valid 
 validator.apply(new Artist("", "lenz@dnb.com")); // invalid 
 ```
+---
+    default ArtistValidator and(ArtistValidator other){
+        return artist -> apply(artist).flatMap(other);
+    }
 ---
 
 # Quiz
@@ -670,6 +728,10 @@ JDK8: `CallSite` creates an inner-class-like class (see [`InnerClassLambdaMetafa
 --
 
 * Functions enable new types of useful abstractions.
+
+--
+
+* Use **combinators** to combine simple **primitives** into more complex structures.
 
 --
 
