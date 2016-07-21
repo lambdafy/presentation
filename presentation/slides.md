@@ -542,6 +542,7 @@ static ArtistValidator nameIsNotEmpty(){
 # Combinators
 Manually applying each validation rule can be cumbersome. **Combinators** provide means to compose
 different `ArtistValidator`s. 
+--
 
 ```Java
 static ArtistValidator and(ArtistValidator first, ArtistValidator second){
@@ -591,10 +592,6 @@ ArtistValidator validator = nameIsNotEmpty().and(hasMailWithAtSign());
 validator.apply(new Artist("Lenzman", "lenz@dnb.com")); // valid 
 validator.apply(new Artist("", "lenz@dnb.com")); // invalid 
 ```
----
-    default ArtistValidator and(ArtistValidator other){
-        return artist -> apply(artist).flatMap(other);
-    }
 ---
 
 # Quiz
@@ -721,7 +718,7 @@ JDK8: `CallSite` creates an inner-class-like class (see [`InnerClassLambdaMetafa
 
 --
 
-* Use **combinators** to combine simple **primitives** into more complex structures.
+* Use combinators to combine simple primitives into more complex structures.
 
 --
 
