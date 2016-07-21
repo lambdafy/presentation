@@ -442,7 +442,17 @@ Map a function over an Optional and flatten the result by one-level
 ---
 #flatMap (Stream)
 
-Example will be here
+```Java
+Stream<Artist> find(List<Artist> a, String query);
+Stream<PhoneNumber> phoneNumber(Address address);
+```
+
+```Java
+Stream<PhoneNumber> phones = 
+    find(artists, "Michael")
+      .map(artist -> artist.address)
+      .flatMap(phoneNumber);
+```
 
 --
 
