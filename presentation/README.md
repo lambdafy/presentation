@@ -1,0 +1,1 @@
+This presentation uses [remark](https://github.com/gnab/remark). Markdown is externalized into `slides.md`. To start the presentation, a web server must be run in this folder (see the [wiki](https://github.com/gnab/remark/wiki#external-markdown)). Alternatively, use github as viewer. 
